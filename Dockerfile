@@ -10,7 +10,6 @@ WORKDIR /build/mirakc
 RUN curl -fsSL https://github.com/masnagam/mirakc/tarball/master | tar -zx --strip-components=1
 RUN cargo build --release
 RUN cp target/release/mirakc /usr/local/bin/
-COPY config.yml /etc/mirakc/config.yml
 
 RUN mkdir -p /build/librarycopy
 WORKDIR /build/librarycopy
@@ -23,7 +22,7 @@ RUN ./exliblist.sh binlist copylist
 RUN echo /usr/local/bin/mirakc >> copylist
 RUN ./lcopy.sh copylist /copydir
 
-# dockerhubでビルド後必要な部分のみ利用出来るようにする
+# dockerhubにビルドおまかせ、生成物のみ取り出す。
 FROM scratch
 
 COPY --from=Mirakc-build /copydir /copydir
